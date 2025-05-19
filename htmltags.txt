@@ -1,0 +1,5 @@
+HTML Tags:
+  - <p>
+  - <div class="example">
+  - <img src="image.jpg" alt="description">
+
