@@ -5,10 +5,8 @@ sample_text = """
 Contact us at user@example.com or firstname.lastname@company.co.uk.
 Visit https://www.example.com or https://subdomain.example.org/page.
 Call us at (123) 456-7890, 123-456-7890, or 123.456.7890.
-Use credit cards 1234-5678-9012-3456 and 1234 5678 9012 3456.
 Meeting times: 14:30, 2:30 PM, and 09:15 am.
 Some HTML: <p>, <div class="example">, <img src="image.jpg" alt="description">
-Use #example and #ThisIsAHashtag.
 Prices: $19.99, $1,234.56, and $1000000.00.
 """
 
@@ -17,10 +15,8 @@ regex_patterns = {
     "Email Addresses": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
     "URLs": r"https?://[^\s]+",
     "Phone Numbers": r"(?:\(\d{3}\)\s?|\d{3}[-.])\d{3}[-.]\d{4}",
-    "Credit Card Numbers": r"\b(?:\d{4}[- ]?){3}\d{4}\b",
     "Time Formats (12/24h)": r"\b(?:[01]?\d|2[0-3]):[0-5]\d(?:\s?[AaPp][Mm])?\b",
     "HTML Tags": r"<[^>]+?>",
-    "Hashtags": r"#\w+",
     "Currency Amounts": r"\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\$\d+(?:\.\d{2})?"
 }
 
