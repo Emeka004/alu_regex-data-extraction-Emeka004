@@ -48,9 +48,9 @@ This Python project validates various types of text data using **Regular Express
 
 ```bash
 python main.py
+4. Choose an option from the menu to start validating.
 
-
-SAMPLE MENU OUTPUT
+📄 Sample Menu Output
 
 		Welcome To The Regex Pattern Finder & Checker!
 
@@ -64,6 +64,30 @@ SAMPLE MENU OUTPUT
 Please select an option from the menu(1-6):
 
 
+✅ Example File Content
+emails.txt
+
+
+user@example.com
+firstname.lastname@company.co.uk
+invalid@com
+
+
+Line 1: 'user@example.com' ---- Valid
+Line 2: 'firstname.lastname@company.co.uk' ---- Valid
+Line 3: 'invalid@com' ---- Invalid
+
+
+📌 Notes
+Ensure the .txt files exist in the same directory as main.py.
+
+Regex patterns are strict by design — malformed or incomplete entries will be marked invalid.
+
+💻 Author
+Made by ALU student Emeka Onugha
+
+📜 License
+This project is licensed under the MIT License.
 
 ---
 
@@ -73,4 +97,3 @@ Let me know if you'd like me to:
 - Write a script to generate all sample `.txt` files for testing
 
 Ready to help with next steps like publishing to GitHub!
-
