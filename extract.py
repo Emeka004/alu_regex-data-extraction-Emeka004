@@ -1,93 +1,63 @@
 import re
 
-def check_currency(text):
-    pattern = re.compile(r'^\$\d{1,3}(,\d{3})*(\.\d{2})?$|^\$\d+(\.\d{2})?$')
-    return bool(pattern.fullmatch(text.strip()))
+# Sample multiline text for demonstration and testing
+sample_text = """
+Contact us at user@example.com or firstname.lastname@company.co.uk.
+Visit https://www.example.com or https://subdomain.example.org/page.
+Call us at (123) 456-7890, 123-456-7890, or 123.456.7890.
+Use credit cards 1234-5678-9012-3456 and 1234 5678 9012 3456.
+Meeting times: 14:30, 2:30 PM, and 09:15 am.
+Some HTML: <p>, <div class="example">, <img src="image.jpg" alt="description">
+Use #example and #ThisIsAHashtag.
+Prices: $19.99, $1,234.56, and $1000000.00.
+"""
 
-def check_phone(text):
-    pattern = re.compile(
-        r'^(\+?\d{1,2}\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$'
-    )
-    return bool(pattern.fullmatch(text.strip()))
+# Dictionary of regex patterns
+regex_patterns = {
+    "Email Addresses": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
+    "URLs": r"https?://[^\s]+",
+    "Phone Numbers": r"(?:\(\d{3}\)\s?|\d{3}[-.])\d{3}[-.]\d{4}",
+    "Credit Card Numbers": r"\b(?:\d{4}[- ]?){3}\d{4}\b",
+    "Time Formats (12/24h)": r"\b(?:[01]?\d|2[0-3]):[0-5]\d(?:\s?[AaPp][Mm])?\b",
+    "HTML Tags": r"<[^>]+?>",
+    "Hashtags": r"#\w+",
+    "Currency Amounts": r"\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\$\d+(?:\.\d{2})?"
+}
 
-def check_html_tag(text):
-    pattern = re.compile(
-        r'^<\/?[a-zA-Z][a-zA-Z0-9]*(\s+[a-zA-Z_:][a-zA-Z0-9_\-:.]*="[^"]*")*\s*\/?>$'
-    )
-    return bool(pattern.fullmatch(text.strip()))
+def extract_data(text, patterns):
+    """
+    Extracts matching data from the input text based on the provided regex patterns.
 
-def check_url(text):
-    pattern = re.compile(
-        r'^https?://([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(/[^\s]*)?(\?[^\s]*)?$'
-    )
-    return bool(pattern.fullmatch(text.strip()))
+    Args:
+        text (str): The input text to search.
+        patterns (dict): A dictionary of {pattern_name: regex}.
 
-def check_email(text):
-    pattern = re.compile(
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    )
-    return bool(pattern.fullmatch(text.strip()))
+    Returns:
+        dict: Extracted matches grouped by pattern name.
+    """
+    results = {}
+    for name, pattern in patterns.items():
+        matches = re.findall(pattern, text)
+        results[name] = matches
+    return results
 
-def process_file(file_path, validator, label):
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            for line_num, line in enumerate(f, 1):
-                line = line.strip()
-                if not line:
-                    continue
-                is_valid = validator(line)
-                print(f"Line {line_num}: '{line}' ---- {'Valid' if is_valid else 'Invalid'}")
-    except FileNotFoundError:
-        print("File not found. Please check the path.\n")
+def display_results(results):
+    """
+    Nicely formats and displays the extracted data.
 
-def main():
-    print("\t" * 2, "Welcome To The Regex Pattern Finder & Checker!\n")
-
-    menu = [
-        "check Currency Amount From currency.txt",
-        "check Phone Number From phones.txt",
-        "check HTML Tag From htmltags.txt",
-        "check Email Address From emails.txt",
-        "check URL Address From urls.txt",
-        "Close The Program"
-    ]
-
-    validators = [
-        ("currency amount", check_currency),
-        ("phone number", check_phone),
-        ("HTML tag", check_html_tag),
-        ("email address", check_email),
-        ("URL address", check_url),
-    ]
-
-    # file paths are here
-    file_paths = {
-        "currency amount": "currency.txt",
-        "phone number": "phones.txt",
-        "HTML tag": "htmltags.txt",
-        "email address": "emails.txt",
-        "URL address": "urls.txt",
-    }
-
-    while True:
-        for idx, item in enumerate(menu, 1):
-            print(f"{idx}. {item}")
-        print()
-        try:
-            choice = int(input("Please select an option from the menu(1-6): "))
-        except ValueError:
-            print("\nInvalid input! Please enter a number between 1 and 6.\n")
-            continue
-
-        if 1 <= choice <= 5:
-            label, validator = validators[choice - 1]
-            file_path = file_paths[label]
-            process_file(file_path, validator, label)
-        elif choice == 6:
-            print("Thank you for Trusting our Team...")
-            break
+    Args:
+        results (dict): A dictionary of {pattern_name: [matches]}.
+    """
+    for category, items in results.items():
+        print(f"\n{category}:")
+        if items:
+            for item in items:
+                print(f"  - {item}")
         else:
-            print("\nInvalid choice! Please select a number between 1 and 6.\n")
+            print("  (No matches found)")
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    print("=== Regex Data Extractor ===")
+    extracted = extract_data(sample_text, regex_patterns)
+    display_results(extracted)
+
